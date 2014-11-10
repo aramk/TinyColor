@@ -2,7 +2,16 @@
 // https://github.com/bgrins/TinyColor
 // Brian Grinstead, MIT License
 
-(function() {
+(function () {
+
+    // global on the server, window in the browser
+    var root = this;
+
+    var _tinycolor = (function() {
+
+////////////////////////////////////////////////////////////////////////////////
+// BEGIN LIBRARY CODE
+////////////////////////////////////////////////////////////////////////////////
 
 var trimLeft = /^[\s,#]+/,
     trimRight = /\s+$/,
@@ -1095,17 +1104,35 @@ function stringInputToObject(color) {
     return false;
 }
 
-// Node: Export function
-if (typeof module !== "undefined" && module.exports) {
-    module.exports = tinycolor;
+return tinycolor;
+
+////////////////////////////////////////////////////////////////////////////////
+// END LIBRARY CODE
+////////////////////////////////////////////////////////////////////////////////
+
+    })();
+
+////////////////////////////////////////////////////////////////////////////////
+// EXPORTS
+////////////////////////////////////////////////////////////////////////////////    
+
+// Meteor
+if (typeof Package !== 'undefined') {
+    tinycolor = _tinycolor;
 }
-// AMD/requirejs: Define the module
-else if (typeof define === 'function' && define.amd) {
-    define(function () {return tinycolor;});
+// AMD / RequireJS
+else if (typeof define !== 'undefined' && define.amd) {
+  define([], function () {
+      return _tinycolor;
+  });
 }
-// Browser: Expose to window
+// Node.js
+else if (typeof module !== 'undefined' && module.exports) {
+  module.exports = _tinycolor;
+}
+// included directly via <script> tag
 else {
-    window.tinycolor = tinycolor;
+  root.tinycolor = _tinycolor;
 }
 
 })();

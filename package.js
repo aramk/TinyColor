@@ -8,5 +8,6 @@ Package.describe({
 
 Package.onUse(function (api) {
   api.versionsFrom('METEOR@0.9.0');
-  api.addFiles(['tinycolor.js'], 'client');
+  api.export('tinycolor');
+  api.addFiles(['tinycolor.js'], ['client', 'server']);
 });
